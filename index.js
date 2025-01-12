@@ -13,13 +13,13 @@ const compression = require("compression");
 const config = require("config");
 const app = express();
 const cors = require('cors');
-console.log('you')
+
 app.use(cors())
-console.log('me')
+
 app.use(express.static("public"));
 app.use(express.json());
-// app.use(helmet());
-//app.use(compression());
+ app.use(helmet());
+app.use(compression());
 
 app.get('/api/k',(req, res) => {
   res.send('ok')

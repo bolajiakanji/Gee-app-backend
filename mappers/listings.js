@@ -2,10 +2,11 @@ const config = require("config");
 
 const mapper = listing => {
   const baseUrl = config.get("assetsBaseUrl");
-  const mapImage = image => ({
-    url: `${baseUrl}${image.fileName}_full.jpg`,
-    thumbnailUrl: `${baseUrl}${image.fileName}_thumb.jpg`
-  });
+  const mapImage = image => {
+console.log(image)
+    return { url: `${baseUrl}${image.fileName}_full.jpg`,
+      thumbnailUrl: `${baseUrl}${image.fileName}_thumb.jpg`
+  } };
 
   return {
     ...listing,

@@ -11,17 +11,16 @@ const schema = Joi.object({
 });
 
 router.post("/", validateWith(schema), (req, res) => {
-  console.log('backend')
   const { email, password } = req.body;
   const user = usersStore.getUserByEmail(email);
   if (!user || user.password !== password)
     return res.status(400).send({ error: "Invalid email or password." });
-console.log('my token')
+
   const token = jwt.sign(
     { userId: user.id, name: user.name, email },
     "jwtPrivateKey"
   );
-  console.log(token)
+
   res.send(token);
 });
 

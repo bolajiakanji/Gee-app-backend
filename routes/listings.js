@@ -63,6 +63,7 @@ router.post(
   ],
 
   async (req, res) => {
+    
     const listing = {
       title: req.body.title,
       price: parseFloat(req.body.price),
@@ -70,7 +71,7 @@ router.post(
       description: req.body.description,
     };
     console.log(req.files)
-    listing.images = req.files.map((fileName) => ({ fileName: fileName }));
+    listing.images = req.files.map((fileName) => ({ fileName: fileName.filename }));
     if (req.body.location) listing.location = JSON.parse(req.body.location);
     if (req.user) listing.userId = req.user.userId;
 
