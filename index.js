@@ -6,6 +6,7 @@ const users = require("./routes/users");
 const user = require("./routes/user");
 const auth = require("./routes/auth");
 const my = require("./routes/my");
+const profileImage = require("./routes/profileImage");
 const messages = require("./routes/messages");
 const expoPushTokens = require("./routes/expoPushTokens");
 const helmet = require("helmet");
@@ -20,7 +21,7 @@ app.use(express.static("public"));
 app.use(express.json());
  app.use(helmet());
 app.use(compression());
-
+console.log('here')
 app.get('/api/k',(req, res) => {
   res.send('ok')
 })
@@ -29,6 +30,7 @@ app.use("/api/listing", listing);
 app.use("/api/listings", listings);
 app.use("/api/user", user);
 app.use("/api/users", users);
+app.use("/api/profileImage", profileImage);
 app.use("/api/auth", auth);
 app.use("/api/my", my);
 app.use("/api/expoPushTokens", expoPushTokens);

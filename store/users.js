@@ -1,4 +1,4 @@
-const users = [
+let users = [
   {
     id: 1,
     name: "Mosh",
@@ -29,4 +29,5 @@ module.exports = {
   getUserByEmail,
   getUserById,
   addUser,
+  users
 };
