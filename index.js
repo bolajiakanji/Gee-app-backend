@@ -14,6 +14,12 @@ const compression = require("compression");
 const config = require("config");
 const app = express();
 const cors = require('cors');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/borji')
+  .then(() => console.log('connected to mongoDB...'))
+.catch(err => console.ERROR('Could not connect to mongoDB...', err)) 
+
 
 app.use(cors())
 
