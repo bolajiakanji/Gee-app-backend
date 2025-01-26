@@ -16,10 +16,13 @@ const upload = multer({
 const outputFolder = "public/assets";
 
 const resizePromise = async (imageFile, email) => {
-  await sharp(imageFile)
-    .resize(2000)
+  const my = await sharp(imageFile)
+    .resize(1000)
     .jpeg({ quality: 50 })
-    .toFile(path.resolve(outputFolder, email + ".jpg"));
+    .toFile(path.resolve(outputFolder,  "mail.jpg"));
+    fs.unlinkSync(imageFile);
+
+  console.log(my)
 };
 
 router.post("/:id", upload.single("profileImage"), (req, res) => {
@@ -31,7 +34,7 @@ router.post("/:id", upload.single("profileImage"), (req, res) => {
   const email = user.email;
 
   resizePromise(req.file.path, email);
-  const filePath = config.get("assetsBaseUrl") + outputFolder + '/' + email + "_.jpg";
+  const filePath = config.get("assetsBaseUrl") + '/' + "mail.jpg";
   let users = getUsers();
   const newUsers = users.map((user) => {
     if (user.id === userId) {
