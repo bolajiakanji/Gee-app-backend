@@ -15,10 +15,22 @@ const config = require("config");
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
+const model = require('./models/listings');
 
 mongoose.connect('mongodb://localhost/borji')
   .then(() => console.log('connected to mongoDB...'))
-.catch(err => console.ERROR('Could not connect to mongoDB...', err)) 
+  .catch(err => console.ERROR('Could not connect to mongoDB...', err)) 
+
+const listin = new model({
+  title: 'bolaji',
+  description: 'hdjjkahja',
+  price: 12,
+  category: 5
+
+})
+listin.save()
+.then((list) => console.log(list))
+  
 
 
 app.use(cors())
