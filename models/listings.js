@@ -31,15 +31,18 @@ const listingsSchema = new mongoose.Schema({
   },
 
   images: {
-    type: [String],
+    type: [ String ],
     required: true,
     },
   
-    created_at: {
-        type: Date,
-        default: Date.now
-  }
-});
+    likes: Number,
+
+    dislikes: Number
+},
+    
+    { timestamps: true }
+    
+);
 
 const Listings = mongoose.model("Listing", listingsSchema);
 
