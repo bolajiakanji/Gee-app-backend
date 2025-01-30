@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 const multer = require("multer");
-
 const store = require("../store/listings");
 const categoriesStore = require("../store/categories");
 const validateWith = require("../middleware/validation");
@@ -12,15 +11,14 @@ const delay = require("../middleware/delay");
 const listingMapper = require("../mappers/listings");
 const config = require("config");
 const object = require("joi/lib/types/object");
-
-
+const Listings = require("../models/listings");
 
 const upload = multer({
   dest: "uploads/",
   limits: { fieldSize: 25 * 1024 * 1024 },
 });
 
-const schema =Joi.object( {
+const schema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().allow(""),
   price: Joi.number().required().min(1),
@@ -38,10 +36,11 @@ const validateCategoryId = (req, res, next) => {
   next();
 };
 
-router.get("/", (req, res) => {
-  const listings = store.getListings();
+router.get("/", async (req, res) => {
+  const listings = await Listings.find();
+
   const resources = listings.map(listingMapper);
-  console.log(resources)
+  console.log(resources);
   res.status(201).send(resources);
 });
 
@@ -63,22 +62,24 @@ router.post(
   ],
 
   async (req, res) => {
-    
     const listing = {
       title: req.body.title,
       price: parseFloat(req.body.price),
       categoryId: parseInt(req.body.categoryId),
       description: req.body.description,
     };
-    console.log(req.files)
-    listing.images = req.files.map((fileName) => ({ fileName: fileName.filename }));
+    console.log(req.files);
+    listing.images = req.files.map((fileName) => ({
+      fileName: fileName.filename,
+    }));
     if (req.body.location) listing.location = JSON.parse(req.body.location);
     if (req.user) listing.userId = req.user.userId;
-
+    const newListing = await Listings.create(listing);
+    const savedListing = newListing.save();
     store.addListing(listing);
-    console.log(listing)
+    console.log(savedListing);
 
-    res.status(201).send(listing);
+    res.status(201).send(savedListing);
   }
 );
 

@@ -4,27 +4,23 @@ const router = express.Router();
 const usersStore = require("../store/users");
 const listingsStore = require("../store/listings");
 const auth = require("../middleware/auth");
+const Users = require("../models/users");
+const Listings = require("../models/listings");
 
-router.get("/:id",  (req, res) => {
-  console.log('bhere')
-  const userId = parseInt(req.params.id);
-  const user = usersStore.getUserById(userId);
+router.get("/:id",  async (req, res) => {
+  
+  const userId = req.params.id;
+  const user = await Users.findById(userId)
+  //const user = usersStore.getUserById(userId);
   if (!user) return res.status(404).send();
 
-  const listings = listingsStore.filterListings(
-    listing => listing.userId === userId
-  );
-console.log({
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  listings: listings.length
-})
+  const userListings = await Listings.find({ userId })
+
   res.send({
     id: user.id,
     name: user.name,
     email: user.email,
-    listings: listings.length
+    listings: userListings.length
   });
 });
 

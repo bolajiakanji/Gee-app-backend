@@ -3,6 +3,7 @@ const router = express.Router();
 const Joi = require("joi");
 const usersStore = require("../store/users");
 const validateWith = require("../middleware/validation");
+const Users = require("../models/users");
 
 const schema =Joi.object ({
   name: Joi.string().required().min(2),
@@ -10,9 +11,10 @@ const schema =Joi.object ({
   password: Joi.string().required().min(5),
 });
 
-router.post("/", validateWith(schema), (req, res) => {
+router.post("/", validateWith(schema), async(req, res) => {
   const { name, email, password } = req.body;
-  if (usersStore.getUserByEmail(email))
+  const users = await Users.findOne(email)
+  if (users)
     return res
       .status(400)
       .send({ error: "A user with the given email already exists." });
@@ -20,11 +22,16 @@ router.post("/", validateWith(schema), (req, res) => {
   const user = { name, email, password };
   usersStore.addUser(user);
 
-  res.status(201).send(user);
+  const newUser = await Users.create({
+    user
+  })
+
+  res.status(201).send(newUser);
 });
 
-router.get("/", (req, res) => {
-  res.send(usersStore.getUsers());
+router.get("/", async (req, res) => {
+  const users = await Users.find({})
+  res.status(201).send(users);
 });
 
 module.exports = router;

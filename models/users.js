@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const usersSchema = new mongoose.Schema(
   {
-    e_mail: {
+    email: {
       type: String,
       required: true,
       unique: true,
@@ -18,7 +18,7 @@ const usersSchema = new mongoose.Schema(
       trim: true,
     },
 
-    surname: {
+    name: {
       type: String,
       required: true,
       maxLength: 255,
@@ -26,20 +26,7 @@ const usersSchema = new mongoose.Schema(
       trim: true,
     },
 
-    middleName: {
-      type: String,
-      required: true,
-      maxLength: 255,
-      minlength: 1,
-      trim: true,
-    },
-
-    otherName: {
-      type: String,
-      maxLength: 255,
-      minlength: 1,
-      trim: true,
-    },
+    
     nickname: {
       type: String,
       maxLength: 255,

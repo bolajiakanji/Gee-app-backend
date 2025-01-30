@@ -4,9 +4,9 @@ const multer = require("multer");
 const sharp = require("sharp");
 const path = require("path");
 const fs = require("fs");
-const { dirname } = require("path/posix");
 const config = require("config");
 const { getUsers, getUserById } = require("../store/users");
+const Users = require("../models/users");
 
 const upload = multer({
   dest: "uploads/",
@@ -15,27 +15,28 @@ const upload = multer({
 
 const outputFolder = "public/assets";
 
-const resizePromise = async (imageFile, email) => {
+const resizePromise = async (imageFile) => {
   const my = await sharp(imageFile)
     .resize(1000)
     .jpeg({ quality: 50 })
-    .toFile(path.resolve(outputFolder,  "mail.jpg"));
-    fs.unlinkSync(imageFile);
+    .toFile(path.resolve(outputFolder, "mail.jpg"));
+  fs.unlinkSync(imageFile);
 
-  console.log(my)
+  console.log(my);
 };
 
-router.post("/:id", upload.single("profileImage"), (req, res) => {
-  const userId = parseInt(req.params.id);
-  const user = getUserById(userId);
+router.post("/:id", upload.single("profileImage"), async (req, res) => {
+  const userId = req.params.id;
+  const user = await Users.findById(userId);
+  //const user = getUserById(userId);
 
   if (!user) return res.status(404).send();
 
   const email = user.email;
 
   resizePromise(req.file.path, email);
-  const filePath = config.get("assetsBaseUrl") + '/' + "mail.jpg";
-  let users = getUsers();
+  const filePath = config.get("assetsBaseUrl") + "/" + "mail.jpg";
+  const users = await Users.find();
   const newUsers = users.map((user) => {
     if (user.id === userId) {
       return {

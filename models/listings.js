@@ -29,6 +29,11 @@ const listingsSchema = new mongoose.Schema(
       required: true,
       min: 1,
       max: 9,
+        },
+        userId: {
+            type: mongoose.Schema.type.objectId,
+            ref: 'Users',
+            require: true
     },
 
     images: {
