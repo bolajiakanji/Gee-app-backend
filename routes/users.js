@@ -20,7 +20,7 @@ router.post("/", validateWith(schema), async(req, res) => {
       .send({ error: "A user with the given email already exists." });
 
   const user = { name, email, password };
-  usersStore.addUser(user);
+  // usersStore.addUser(user);
 
   const newUser = await Users.create({
     user

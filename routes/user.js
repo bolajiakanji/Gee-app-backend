@@ -7,9 +7,9 @@ const auth = require("../middleware/auth");
 const Users = require("../models/users");
 const Listings = require("../models/listings");
 
-router.get("/:id",  async (req, res) => {
+router.get("/",auth,  async (req, res) => {
   
-  const userId = req.params.id;
+  const userId = req.user.userId;
   const user = await Users.findById(userId)
   //const user = usersStore.getUserById(userId);
   if (!user) return res.status(404).send();
