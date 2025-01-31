@@ -17,9 +17,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const Model = require('./models/listings');
 
-mongoose.connect('mongodb://localhost/borji')
+mongoose.connect('mongodb://localhost/borjiNew')
   .then(() => console.log('connected to mongoDB...'))
-  .catch(err => console.ERROR('Could not connect to mongoDB...', err)) 
+  .catch(err => console.error('Could not connect to mongoDB...', err)) 
 
 // const listin = Model.create({
 //   title: 'bolaji',

@@ -24,20 +24,20 @@ const listingsSchema = new mongoose.Schema(
       min: 1,
     },
 
-    category: {
+    categoryId: {
       type: Number,
       required: true,
+
       min: 1,
-      max: 9,
-        },
-        userId: {
-            type: mongoose.Schema.type.objectId,
-            ref: 'Users',
-            require: true
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
     },
 
     images: {
-      type: [String],
+      type: [{ String: String }],
       required: true,
     },
 

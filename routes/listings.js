@@ -37,11 +37,13 @@ const validateCategoryId = (req, res, next) => {
 };
 
 router.get("/", async (req, res) => {
-  const listings = await Listings.find();
-
+  console.log('herw getlis')
+  const listings = await Listings.find({});
+console.log('okkjh')
+console.log(listings)
   const resources = listings.map(listingMapper);
   console.log(resources);
-  res.status(201).send(resources);
+  res.status(201).send(listings);
 });
 
 router.post(
@@ -60,7 +62,7 @@ router.post(
     validateCategoryId,
     imageResize,
   ],
-
+auth,
   async (req, res) => {
     const listing = {
       title: req.body.title,
@@ -68,17 +70,17 @@ router.post(
       categoryId: parseInt(req.body.categoryId),
       description: req.body.description,
     };
-    console.log(req.files);
+    
     listing.images = req.files.map((fileName) => ({
       fileName: fileName.filename,
     }));
     if (req.body.location) listing.location = JSON.parse(req.body.location);
     if (req.user) listing.userId = req.user.userId;
     const newListing = await Listings.create(listing);
-    const savedListing = newListing.save();
+    const savedListing =await newListing.save();
     store.addListing(listing);
-    console.log(savedListing);
-
+    
+console.log(savedListing)
     res.status(201).send(savedListing);
   }
 );

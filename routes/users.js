@@ -11,9 +11,11 @@ const schema =Joi.object ({
   password: Joi.string().required().min(5),
 });
 
-router.post("/", validateWith(schema), async(req, res) => {
+router.post("/", validateWith(schema), async (req, res) => {
+  console.log(req.body)
   const { name, email, password } = req.body;
-  const users = await Users.findOne(email)
+  const users = await Users.findOne({ email: email })
+  console.log(users + 'cv')
   if (users)
     return res
       .status(400)
@@ -22,9 +24,9 @@ router.post("/", validateWith(schema), async(req, res) => {
   const user = { name, email, password };
   // usersStore.addUser(user);
 
-  const newUser = await Users.create({
+  const newUser = await Users.create(
     user
-  })
+  )
 
   res.status(201).send(newUser);
 });

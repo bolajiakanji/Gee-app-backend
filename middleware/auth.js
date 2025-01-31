@@ -2,9 +2,11 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
   const token = req.header("x-auth-token");
-  if (!token)
+  console.log(token)
+  if (!token) {
+    console.log('authdddscc')
     return res.status(401).send({ error: "Access denied. No token provided." });
-
+  }
   try {
     const payload = jwt.verify(token, "jwtPrivateKey");
     req.user = payload;
