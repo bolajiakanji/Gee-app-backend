@@ -12,6 +12,7 @@ const listingMapper = require("../mappers/listings");
 const config = require("config");
 const object = require("joi/lib/types/object");
 const Listings = require("../models/listings");
+const Users = require("../models/users");
 
 const upload = multer({
   dest: "uploads/",
@@ -37,13 +38,13 @@ const validateCategoryId = (req, res, next) => {
 };
 
 router.get("/", async (req, res) => {
-  console.log('herw getlis')
-  const listings = await Listings.find({});
-console.log('okkjh')
-console.log(listings)
+  const listings = await Listings.find({}).populate("userId").lean();
+  
+
   const resources = listings.map(listingMapper);
-  console.log(resources);
-  res.status(201).send(listings);
+
+  console.log(resources)
+  res.status(201).send(resources);
 });
 
 router.post(
@@ -62,7 +63,7 @@ router.post(
     validateCategoryId,
     imageResize,
   ],
-auth,
+  auth,
   async (req, res) => {
     const listing = {
       title: req.body.title,
@@ -70,17 +71,18 @@ auth,
       categoryId: parseInt(req.body.categoryId),
       description: req.body.description,
     };
-    
-    listing.images = req.files.map((fileName) => ({
-      fileName: fileName.filename,
-    }));
+
+    listing.images = req.files.map((fileName) => fileName.filename);
     if (req.body.location) listing.location = JSON.parse(req.body.location);
-    if (req.user) listing.userId = req.user.userId;
+    const userId = req.user.userId
+    if (req.user) listing.userId = userId;
     const newListing = await Listings.create(listing);
-    const savedListing =await newListing.save();
-    store.addListing(listing);
+    const savedListing = await newListing.save();
+    const userListings = await Listings.find({ userId })
+
+    const updateUserlistings =await Users.findByIdAndUpdate(userId,{userListings: userListings.length} )
+
     
-console.log(savedListing)
     res.status(201).send(savedListing);
   }
 );

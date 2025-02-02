@@ -3,9 +3,9 @@ const config = require("config");
 const mapper = listing => {
   const baseUrl = config.get("assetsBaseUrl");
   const mapImage = image => {
-console.log(image)
-    return { url: `${baseUrl}${image.fileName}_full.jpg`,
-      thumbnailUrl: `${baseUrl}${image.fileName}_thumb.jpg`
+
+    return { url: `${baseUrl}${image}_full.jpg`,
+      thumbnailUrl: `${baseUrl}${image}_thumb.jpg`
   } };
 
   return {

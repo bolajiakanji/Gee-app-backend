@@ -32,12 +32,12 @@ const listingsSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "User",
       required: true,
     },
 
     images: {
-      type: [{ String: String }],
+      type: [String],
       required: true,
     },
 

@@ -24,6 +24,11 @@ const usersSchema = new mongoose.Schema(
       maxLength: 255,
       minlength: 1,
       trim: true,
+        },
+        userListings: {
+            type: Number,
+            required: true,
+            default: 0
     },
 
     
