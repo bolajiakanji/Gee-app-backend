@@ -38,13 +38,28 @@ const validateCategoryId = (req, res, next) => {
 };
 
 router.get("/", async (req, res) => {
-  const listings = await Listings.find({}).populate("userId").lean();
-  
+  let next = parseInt(req.query.next);
+  const count = await Listings.find({}).countDocuments().lean();
+  const docPerPage = 4;
+  const numberOfPage =Math.ceil(count / docPerPage);
+
+  // if (next + 1 > numberOfPage ) return res.status(200).send({});
+  const listings = await Listings.find({})
+    .populate("userId")
+    .skip((next-1) * docPerPage)
+    .limit(docPerPage)
+    .lean();
 
   const resources = listings.map(listingMapper);
+  const result = {
+    resources, nextPage: numberOfPage <= next ? null : next + 1
+  }
 
-  console.log(resources)
-  res.status(201).send(resources);
+  console.log(resources);
+  console.log(result);
+  console.log(req.query);
+  
+  res.status(200).send(result);
 });
 
 router.post(
@@ -74,15 +89,16 @@ router.post(
 
     listing.images = req.files.map((fileName) => fileName.filename);
     if (req.body.location) listing.location = JSON.parse(req.body.location);
-    const userId = req.user.userId
+    const userId = req.user.userId;
     if (req.user) listing.userId = userId;
     const newListing = await Listings.create(listing);
     const savedListing = await newListing.save();
-    const userListings = await Listings.find({ userId })
+    const userListings = await Listings.find({ userId });
 
-    const updateUserlistings =await Users.findByIdAndUpdate(userId,{userListings: userListings.length} )
+    const updateUserlistings = await Users.findByIdAndUpdate(userId, {
+      userListings: userListings.length,
+    });
 
-    
     res.status(201).send(savedListing);
   }
 );
