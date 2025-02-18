@@ -30,29 +30,44 @@ const schema = Joi.object({
   }).optional(),
 });
 
-const validateCategoryId = (req, res, next) => {
+const validateCategoryId = (req, res, page) => {
   if (!categoriesStore.getCategory(parseInt(req.body.categoryId)))
     return res.status(400).send({ error: "Invalid categoryId." });
 
-  next();
+  page();
 };
 
 router.get("/", async (req, res) => {
-  let next = parseInt(req.query.next);
-  const count = await Listings.find({}).countDocuments().lean();
+  const queryObject = req.query
+  console.log(req.query)
+  let page = parseInt(queryObject.page);
+
+  let category = queryObject.category ? parseInt(queryObject.category) : undefined;
+  console.log(category)
+  let date = queryObject.date ? {$lte : queryObject.date} : undefined
+  const count = await Listings.find({
+     categoryId: category,
+     createdAt: date
+  })
+    .countDocuments()
+    .lean();
   const docPerPage = 4;
   const numberOfPage =Math.ceil(count / docPerPage);
 
-  // if (next + 1 > numberOfPage ) return res.status(200).send({});
-  const listings = await Listings.find({})
+  // if (page + 1 > numberOfPage ) return res.status(200).send({});
+  const listings = await Listings.find({
+    categoryId: category,
+     createdAt: date
+  })
     .populate("userId")
-    .skip((next-1) * docPerPage)
+    .sort({createdAt: -1})
+    .skip((page-1) * docPerPage)
     .limit(docPerPage)
     .lean();
 
   const resources = listings.map(listingMapper);
   const result = {
-    resources, nextPage: numberOfPage <= next ? null : next + 1
+    resources, nextPage: numberOfPage <= page ? null : page + 1
   }
 
   console.log(resources);
