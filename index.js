@@ -44,7 +44,7 @@ mongoose.connect('mongodb://localhost/borjiNew', { ignoreUndefined: true})
 //   })
 
 // Model.findById('67987aa8ef501ef3904b4a0c').then((res) => console.log(res))
-
+console.log('testing')
 
 app.use(cors())
 

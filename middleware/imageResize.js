@@ -21,6 +21,8 @@ module.exports = async (req, res, next) => {
     fs.unlinkSync(file.path);
 
     images.push(file.filename);
+    console.log(__dirname)
+    console.log('dirname')
   });
 
   await Promise.all([...resizePromises]);

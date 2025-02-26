@@ -27,6 +27,8 @@ const resizePromise = async (imageFile) => {
 
 router.post("/:id", upload.single("profileImage"), async (req, res) => {
   const userId = req.params.id;
+  console.log('hereb')
+  console.log(userId)
   const user = await Users.findById(userId);
   //const user = getUserById(userId);
 
@@ -35,7 +37,7 @@ router.post("/:id", upload.single("profileImage"), async (req, res) => {
   const email = user.email;
 
   resizePromise(req.file.path, email);
-  const filePath = config.get("assetsBaseUrl") + "/" + "mail.jpg";
+  const filePath = config.get("assetsBaseUrl") + "/" + email + ".jpg";
   const users = await Users.find();
   const newUsers = users.map((user) => {
     if (user.id === userId) {
