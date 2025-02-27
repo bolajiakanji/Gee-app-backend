@@ -95,16 +95,19 @@ router.post(
   ],
   auth,
   async (req, res) => {
+    const userId = req.user._id;
+    console.log('userid')
+    console.log(userId)
     const listing = {
       title: req.body.title,
       price: parseFloat(req.body.price),
       categoryId: parseInt(req.body.categoryId),
       description: req.body.description,
+      userId
     };
 
     listing.images = req.files.map((fileName) => fileName.filename);
     if (req.body.location) listing.location = JSON.parse(req.body.location);
-    const userId = req.user.userId;
     if (req.user) listing.userId = userId;
     const newListing = await Listings.create(listing);
     const savedListing = await newListing.save();

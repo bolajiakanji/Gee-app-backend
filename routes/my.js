@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 
 
 
+
+
 const multer = require("multer");
 const sharp = require("sharp");
 const path = require("path");
@@ -29,8 +31,8 @@ const upload = multer({
 });
 
 
-const resizePromise = async (req) => {
-  const outputFolder = "public/assets/profileImage/" + req.user.email + '.jpg';
+const resizePromise = async (req, time) => {
+  const outputFolder = "public/assets/profileImage/" + req.user.email + time +  '.jpg';
   //fs.unlinkSync(path.resolve(outputFolder, ".jpg"));
   const myImage = await sharp(req.file.path)
     .resize(1000)
@@ -58,10 +60,11 @@ router.post("/profileImage", [auth, upload.single("profileImage")], async (req, 
   if (!myObject) return res.status(404).send({ error: 'No such user' });
 
   const email = myObject.email;
+  const time = Date.now()
 
-  resizePromise(req, email);
-  const filePath = config.get("assetsBaseUrl") + 'profileImage/' + email + ".jpg";
-  const owner = await Users.findByIdAndUpdate(userId, { image: filePath }, {lean: true});
+  resizePromise(req, time);
+  const filePath = config.get("assetsBaseUrl") + 'profileImage/' + email + time + ".jpg";
+  const owner = await Users.findByIdAndUpdate(userId, { image: filePath }, {lean: true, returnDocument: 'after'});
   console.log('filepath')
   // const newUsers = users.map((user) => {
   console.log(filePath)
