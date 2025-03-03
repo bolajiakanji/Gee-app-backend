@@ -41,7 +41,7 @@ const listingsSchema = new mongoose.Schema(
       required: true,
     },
 
-    likes: Number,
+    likes: [String],
 
     dislikes: Number,
   },
