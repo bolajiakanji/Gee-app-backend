@@ -43,7 +43,10 @@ const listingsSchema = new mongoose.Schema(
 
     likes: [String],
 
-    dislikes: Number,
+    comment: {
+      type: Number,
+      default: 0
+  }
   },
 
   { timestamps: true }

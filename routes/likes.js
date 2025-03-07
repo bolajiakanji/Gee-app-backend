@@ -56,9 +56,10 @@ router.put("/:id", auth, async (req, res) => {
 
     console.log('not here')
         
-        return res.status(400).send({error: 'user did not like the item'})
+    return res.status(400).send({ error: 'user did not like the item' })
 
-})
+})    
+
 
 
 module.exports = router;

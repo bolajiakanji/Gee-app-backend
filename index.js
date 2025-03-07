@@ -18,6 +18,40 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const Model = require('./models/listings');
+require('dotenv').config()
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+
+
+// // Log the configuration
+// console.log(cloudinary.config());
+// const uploadImage = async (imagePath) => {
+
+//   // Use the uploaded file's name as the asset's public ID and 
+//   // allow overwriting the asset with new versions
+//   const options = {
+//     use_filename: true,
+//     unique_filename: false,
+//     overwrite: true,
+//   };
+
+//   try {
+//     // Upload the image
+//     const result = await cloudinary.uploader.upload(imagePath, options);
+//     console.log(result);
+//     return result.public_id;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+// uploadImage(__dirname + '/public/assets/1a47083fac069fbfe6a44b6d2a8f0a42_full.jpg')
+
+
 
 mongoose.connect('mongodb://localhost/borjiNew', { ignoreUndefined: true})
   .then(() => console.log('connected to mongoDB...'))
