@@ -67,10 +67,12 @@ router.get("/", async (req, res) => {
 
   const resources = listings.map(listingMapper);
   const result = {
-    resources, nextPage: numberOfPage <= page ? null : page + 1
+    resources:listings, nextPage: numberOfPage <= page ? null : page + 1
   }
 
-  console.log(resources);
+  
+  //console.log(result.resources[0].images);
+  console.log('resultimages');
   console.log(result);
   console.log(req.query);
   
@@ -106,7 +108,7 @@ router.post(
       userId
     };
 
-    listing.images = req.files.map((fileName) => fileName.filename);
+    listing.images = req.images.map((fileName) => fileName);
     if (req.body.location) listing.location = JSON.parse(req.body.location);
     if (req.user) listing.userId = userId;
     const newListing = await Listings.create(listing);
