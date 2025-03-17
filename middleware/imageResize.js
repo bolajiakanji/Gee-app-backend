@@ -63,8 +63,8 @@ module.exports = async (req, res, next) => {
       .toFile(getFile().thumbImage)
       ;
       
-  const fullImages = await uploadImage(getFile().fullImage)
-  const thumbImage = await uploadImage(getFile().thumbImage)
+  const url = await uploadImage(getFile().fullImage)
+  //await uploadImage(getFile().thumbImage)
      console.log(url.public_id)
      console.log('dirname')
 
