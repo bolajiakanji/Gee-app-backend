@@ -17,8 +17,8 @@ const uploadImage = async (imagePath) => {
   // Use the uploaded file's name as the asset's public ID and 
   // allow overwriting the asset with new versions
   const options = {
-    use_filename: true,
-    unique_filename: false,
+    
+    unique_filename: true,
     overwrite: true,
     asset_folder: 'items',
     use_asset_folder_as_public_id_prefix: true

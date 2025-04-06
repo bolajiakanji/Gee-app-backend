@@ -10,7 +10,7 @@ const auth = require("../middleware/auth");
 
 
 const schema = Joi.object({
-    listingId: Joi.string().required(),
+    
   comment: Joi.string().required(),
     
 });
@@ -24,17 +24,17 @@ router.get("/:listingId", auth, async(req, res) => {
   
 })
   
-router.post("/", [auth, validateWith(schema)], async (req, res) => {
+router.post("/:listingId", [auth, validateWith(schema)], async (req, res) => {
     console.log('comment')
     const comment = {
         userId: req.user._id,
-        listingId: req.body.listingId,
+        listingId: req.params.listingId,
         comment: req.body.comment
     }
-    const listing = await Listings.findById(req.body.listingId)
+    const listing = await Listings.findById(req.params.listingId)
     if (!listing) return res.status(404).send({error: 'listing not found'})
     await Comments.create(comment)
-    const comments = await Comments.find({ listingId: req.body.listingId })
+    const comments = await Comments.find({ listingId: req.params.listingId })
 
   console.log(comments)
   console.log('commenteee')
