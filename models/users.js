@@ -41,6 +41,7 @@ const usersSchema = new mongoose.Schema(
     image: {
       type: String,
       trim: true,
+      default: ''
     },
 
     phoneNo: {
