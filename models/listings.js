@@ -43,7 +43,7 @@ const listingsSchema = new mongoose.Schema(
 
     likes: [String],
 
-    comment: {
+    comments: {
       type: Number,
       default: 0
   }
