@@ -37,6 +37,8 @@ const uploadImage = async (imagePath) => {
 };
 
 const getPath = (file) => {
+  console.log(file.filename)
+  console.log('file.filename')
   const outputFolder = "public/assets";
   const fullImage = path.resolve(outputFolder, file.filename +  "_full.webp")
   const thumbImage = path.resolve(outputFolder, file.filename + "_thumb.webp")
