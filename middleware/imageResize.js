@@ -1,23 +1,11 @@
 const sharp = require("sharp");
 const path = require("path");
 const fs = require("fs");
+const getOrderedFilesArray = require("../utilities/orderedFileArray");
 
 const cloudinary = require('cloudinary').v2;
-
-// cloudinary.config({ 
-//   cloud_name: process.env.CLOUD_NAME, 
-//   api_key: process.env.API_KEY,
-//   api_secret: process.env.API_SECRET
-// });
-
-// Log the configuration
-console.log(cloudinary.config());
 const uploadImage = async (imagePath) => {
-
-  // Use the uploaded file's name as the asset's public ID and 
-  // allow overwriting the asset with new versions
   const options = {
-    
     unique_filename: true,
     overwrite: true,
     asset_folder: 'items',
@@ -27,10 +15,12 @@ const uploadImage = async (imagePath) => {
   try {
     // Upload the image
     const result = await cloudinary.uploader.upload(imagePath, options);
+    console.log('result');
+    console.log('resu');
     console.log(result.public_id);
     console.log(result);
-    console.log('result');
-    return result.public_id;
+
+    return {id: result.public_id, filename: result.original_filename };
   } catch (error) {
     console.error(error);
   }
@@ -40,47 +30,60 @@ const getPath = (file) => {
   console.log(file.filename)
   console.log('file.filename')
   const outputFolder = "public/assets";
-  const fullImage = path.resolve(outputFolder, file.filename +  "_full.webp")
-  const thumbImage = path.resolve(outputFolder, file.filename + "_thumb.webp")
+  const fullImage = path.resolve(outputFolder, file.filename + file.originalname + "_full.webp")
+  const thumbImage = path.resolve(outputFolder, file.filename + file.originalname + "_thumb.webp")
   return { fullImage, thumbImage }
 }
 
 
 module.exports = async (req, res, next) => {
-  
+  console.log('hereyou')
+  console.log(req.files)
   const images = [];
   
+  
+  console.log('hereme')
   const resizePromises = req.files.map(async (file) => {
+    console.log(file)
+    console.log('file')
+    console.log('fie')
     const getFile = () => {
       return getPath(file)
     }
-    await sharp(file.path)
+   await sharp(file.path)
       .resize(800)
       .webp({ quality: 30 })
-      .toFile(getFile().fullImage);
-
+      .toFile(getFile().fullImage)
+     
+    
+    
     await sharp(file.path)
-      .resize(70)
-      .webp({ quality: 12 })
-      .toFile(getFile().thumbImage)
-      ;
+    .resize(70)
+    .webp({ quality: 12 })
+    .toFile(getFile().thumbImage)
+    
+    
+      
       
   const url = await uploadImage(getFile().fullImage)
   //await uploadImage(getFile().thumbImage)
      console.log(url.public_id)
-     console.log('dirname')
-
-    fs.unlinkSync(file.path);
-    fs.unlinkSync(getFile().fullImage);
-    fs.unlinkSync(getFile().thumbImage);
+     
+     fs.unlinkSync(file.path);
+     fs.unlinkSync(getFile().fullImage);
+     fs.unlinkSync(getFile().thumbImage);
+     
+     images.push(url);
+     console.log(__dirname)
+     console.log('__dirname')
+     console.log(url)
+    });
     
-    images.push(url);
-    console.log(__dirname)
-  });
-
-  await Promise.all([...resizePromises]);
-
-  req.images = images;
+    await Promise.all([...resizePromises]);
+    
+    req.images = getOrderedFilesArray(images);
+    console.log('dirname')
+    console.log('dirne')
 
   next();
 };
