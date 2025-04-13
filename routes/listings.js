@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
   })
     .countDocuments()
     .lean();
-  const docPerPage = 4;
+  const docPerPage = 10;
   const numberOfPage =Math.ceil(count / docPerPage);
 
   // if (page + 1 > numberOfPage ) return res.status(200).send({});
