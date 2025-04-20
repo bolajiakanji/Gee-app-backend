@@ -44,23 +44,26 @@ const usersSchema = new mongoose.Schema(
       default: ''
     },
 
-    contact: [{
-      heading: {
-        type: String,
-        trim: true,
-        maxLength: 255,
-        minlength: 1,
+    contacts: {
+     type: [{
+        heading: {
+          type: String,
+          trim: true,
+          maxLength: 255,
+          minlength: 1,
         
-      },
-      contactInfo:{
-        type: String,
-        trim: true,
-        maxLength: 255,
-        minlength: 1,
+        },
+        contactInfo: {
+          type: String,
+          trim: true,
+          maxLength: 255,
+          minlength: 1,
         
-      },
+        },
 
-    }]
+      }],
+    default: []
+    }
   },
 
   { timestamps: true }
