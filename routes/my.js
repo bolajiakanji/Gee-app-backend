@@ -97,7 +97,7 @@ router.post("/profileImage", [auth, upload.single("profileImage")], async (req, 
   const getFile = () => {
     return getPath(file);
   };
-  await sharp(file.path).resize(70).webp({ quality: 12 }).toFile(getFile());
+  await sharp(file.path).resize(500).webp({ quality: 50 }).toFile(getFile());
   const url = await uploadImage(getFile());
 
   console.log(url.public_id);

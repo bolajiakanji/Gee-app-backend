@@ -44,14 +44,23 @@ const usersSchema = new mongoose.Schema(
       default: ''
     },
 
-    phoneNo: {
-      type: Number,
-    },
+    contact: [{
+      heading: {
+        type: String,
+        trim: true,
+        maxLength: 255,
+        minlength: 1,
+        
+      },
+      contactInfo:{
+        type: String,
+        trim: true,
+        maxLength: 255,
+        minlength: 1,
+        
+      },
 
-    watsapNo: {
-      type: String,
-      trim: true,
-    },
+    }]
   },
 
   { timestamps: true }
