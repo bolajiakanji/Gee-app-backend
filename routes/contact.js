@@ -4,6 +4,8 @@ const Users = require("../models/users");
 const Joi = require("joi");
 const validateWith = require("../middleware/validation");
 const auth = require("../middleware/auth");
+const jwt = require("jsonwebtoken");
+
 
 const schema = Joi.object({
     heading: Joi.string().required().allow('').max(255),
@@ -20,10 +22,16 @@ router.put("/", [auth, validateWith(schema)], async (req, res) => {
             const newUserInfo  = await Users.findByIdAndUpdate(req.user._id, { $push: { contacts: req.body} },
                 { returnDocument: 'after', lean: true })
             console.log(newUserInfo)
-            console.log('not here3')
+    console.log('not here3')
+    const token = jwt.sign(
+        {...newUserInfo},
+        "jwtPrivateKey"
+      );
+      console.log(token)
+    
+      res.send(token);
 
             
-            return res.status(200).send(newUserInfo);
           
         
     
