@@ -38,8 +38,14 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(helmet());
 app.use(compression());
+app.use((x,y,z) => {
+  console.log('nextnextnnext')
+  z()
+});
+
 
 app.get('/api/ok', (req, res) => {
+  console.log('ok')
   res.send('ok')
 })
 
@@ -48,7 +54,7 @@ app.use("/api/listing", listing);
 app.use("/api/listings", listings);
 app.use("/api/user", user);
 app.use("/api/users", users);
-app.use("/api/userListings", userListings);
+app.use("/api/mk", userListings);
 app.use("/api/contacts", contacts);
 app.use("/api/comments", comments);
 app.use("/api/likes", likes);

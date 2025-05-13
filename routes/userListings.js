@@ -3,7 +3,8 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const Listings = require("../models/listings");
 
-router.get("/id",auth,  async (req, res) => {
+router.get("/:id",auth,  async (req, res) => {
+  console.log('lets go')
   const userId = req.params.id;
  
     const userListings = await Listings.find({ userId })

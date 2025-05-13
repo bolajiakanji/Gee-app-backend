@@ -42,6 +42,7 @@ router.post("/:listingId", [auth, validateWith(schema)], async (req, res) => {
   await Listings.findByIdAndUpdate({ _id: req.params.listingId }, {comments: comments.length})
   console.log(comments)
   console.log('commenteee')
+  console.log('commenteee')
   res.status(200).send(comments);
   
 })
