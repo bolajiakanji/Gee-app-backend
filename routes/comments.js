@@ -37,7 +37,8 @@ router.post("/:listingId", [auth, validateWith(schema)], async (req, res) => {
     if (!listing) return res.status(404).send({error: 'listing not found'})
     await Comments.create(comment)
     const comments = await Comments.find({ listingId: req.params.listingId })
-    .populate('userId')
+      .populate('userId')
+      
     .lean()
   await Listings.findByIdAndUpdate({ _id: req.params.listingId }, {comments: comments.length})
   console.log(comments)
@@ -45,6 +46,24 @@ router.post("/:listingId", [auth, validateWith(schema)], async (req, res) => {
   console.log('commenteee')
   res.status(200).send(comments);
   
+})
+router.delete('/:commentId/:listingId', auth, async (req, res) => {
+  console.log('deleteme')
+  
+
+  await Comments.deleteOne(
+    { _id: req.params.commentId}
+  )
+  const comments = await Comments.find({ listingId: req.params.listingId })
+    .populate('userId')
+    .sort('desc')
+    .lean()
+    await Listings.findByIdAndUpdate({ _id: req.params.listingId }, {comments: comments.length})
+
+  console.log('delete2')
+  console.log(comments)
+  res.status(200).send(comments);
+
 })
 
 module.exports = router;

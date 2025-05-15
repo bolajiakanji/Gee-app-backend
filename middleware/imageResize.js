@@ -39,6 +39,7 @@ const getPath = (file) => {
 module.exports = async (req, res, next) => {
   console.log('hereyou')
   console.log(req.files)
+  console.log('hereyou2')
   const images = [];
   
   
