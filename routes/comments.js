@@ -47,21 +47,21 @@ router.post("/:listingId", [auth, validateWith(schema)], async (req, res) => {
   res.status(200).send(comments);
   
 })
-router.delete('/:commentId/:listingId', auth, async (req, res) => {
-  console.log('deleteme')
+router.delete('/:listingId', auth, async (req, res) => {
   
-
   await Comments.deleteOne(
-    { _id: req.params.commentId}
+    { _id: req.query.commentId}
   )
   const comments = await Comments.find({ listingId: req.params.listingId })
-    .populate('userId')
-    .sort('desc')
-    .lean()
-    await Listings.findByIdAndUpdate({ _id: req.params.listingId }, {comments: comments.length})
-
-  console.log('delete2')
+  .populate('userId')
+  .sort('desc')
+  .lean()
+  await Listings.findByIdAndUpdate({ _id: req.params.listingId }, {comments: comments.length})
+  
   console.log(comments)
+  console.log('delete2')
+  console.log('deleteme')
+  console.log(req.query)
   res.status(200).send(comments);
 
 })
