@@ -49,6 +49,7 @@ router.post("/:listingId", [auth, validateWith(schema)], async (req, res) => {
 })
 router.delete('/:listingId', auth, async (req, res) => {
   
+  console.log('delete2')
   await Comments.deleteOne(
     { _id: req.query.commentId}
   )
@@ -59,7 +60,6 @@ router.delete('/:listingId', auth, async (req, res) => {
   await Listings.findByIdAndUpdate({ _id: req.params.listingId }, {comments: comments.length})
   
   console.log(comments)
-  console.log('delete2')
   console.log('deleteme')
   console.log(req.query)
   res.status(200).send(comments);
