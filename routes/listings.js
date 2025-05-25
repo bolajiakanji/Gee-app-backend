@@ -38,13 +38,16 @@ const validateCategoryId = (req, res, next) => {
 };
 
 router.get("/", async (req, res) => {
-  const queryObject = req.query
+  let queryObject = req.query
   console.log(req.query)
   let page = parseInt(queryObject.page);
-
-  let category = queryObject.category ? parseInt(queryObject.category) : undefined;
+queryObject = queryObject.category == '0' ? {...queryObject, category: ''} : {...queryObject}
+  let category =   queryObject.category ? parseInt(queryObject.category) : undefined;
+  console.log('category34')
   console.log(category)
-  let date = queryObject.date ? {$lte : queryObject.date} : undefined
+  let date = queryObject.date ? { $lte: queryObject.date } : undefined
+  console.log('date')
+  console.log(date)
   const count = await Listings.find({
      categoryId: category,
      createdAt: date
