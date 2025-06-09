@@ -22,7 +22,7 @@ const upload = multer({
 const schema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().allow(""),
-  price: Joi.number().required().min(1),
+  price: Joi.number().required().min(100),
   categoryId: Joi.number().required().min(1),
   location: Joi.object({
     latitude: Joi.number().required(),
